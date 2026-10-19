@@ -7,11 +7,10 @@ import {
     useCallback,
     useRef
 } from 'react';
-import { useSelector, useDispatch, useStore } from 'react-redux';
-import { RootState, AppDispatch } from '../store';
+import { useAppDispatch, useAppSelector, useAppStore } from '../app/hooks';
 import { increment } from '../features/counterSlice';
 import Child from './Child';
-import Sibling from './Sibling';
+import Sibling, { type SiblingHandle } from './Sibling';
 import { useDebugValueDemo } from '../hooks/useDebugValueDemo';
 
 // Define the Parent component
@@ -19,11 +18,11 @@ const Parent = () => {
     console.log('Parent Render Start');
 
     const [localState, setLocalState] = useState(0);
-    const dispatch: AppDispatch = useDispatch();
-    const counter = useSelector((state: RootState) => state.counter.value);
-    const store = useStore();
+    const dispatch = useAppDispatch();
+    const counter = useAppSelector((state) => state.counter.value);
+    const store = useAppStore();
     const parentRef = useRef<HTMLDivElement>(null);
-    const siblingRef = useRef<{ focusInput: () => void }>(null);
+    const siblingRef = useRef<SiblingHandle>(null);
 
     // Custom hook to demo useDebugValue
     const debugLocalState = useDebugValueDemo(localState);

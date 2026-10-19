@@ -7,8 +7,7 @@ import {
     useCallback,
     useRef
 } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from '../store';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { decrement } from '../features/counterSlice';
 
 // Define the Child component
@@ -16,8 +15,8 @@ const Child = () => {
     console.log('Child Render Start');
 
     const [childState, setChildState] = useState(0);
-    const dispatch: AppDispatch = useDispatch();
-    const counter = useSelector((state: RootState) => state.counter.value);
+    const dispatch = useAppDispatch();
+    const counter = useAppSelector((state) => state.counter.value);
     const childRef = useRef<HTMLDivElement>(null);
 
     // useEffect demonstration

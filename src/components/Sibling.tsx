@@ -7,23 +7,22 @@ import {
     useCallback,
     useReducer,
     useRef,
-    forwardRef,
-    useImperativeHandle
+    useImperativeHandle,
+    type Ref
 } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../store';
+import { useAppSelector } from '../app/hooks';
 
 // Define the interface for the Sibling component's imperative handle
-interface SiblingHandle {
+export interface SiblingHandle {
     focusInput: () => void;
 }
 
-// Define the Sibling component using forwardRef to expose an imperative handle
-const Sibling = forwardRef<SiblingHandle>((_props, ref) => {
+// Define the Sibling component; since React 19, ref is a regular prop, so no forwardRef
+const Sibling = ({ ref }: { ref?: Ref<SiblingHandle> }) => {
     console.log('Sibling Render Start');
 
     const [siblingState, setSiblingState] = useState(0);
-    const counter = useSelector((state: RootState) => state.counter.value);
+    const counter = useAppSelector((state) => state.counter.value);
     const inputRef = useRef<HTMLInputElement>(null);
 
     // useEffect demonstration
@@ -62,14 +61,11 @@ const Sibling = forwardRef<SiblingHandle>((_props, ref) => {
         0
     );
 
-    // Expose a method to focus the input using useImperativeHandle
+    // Expose a method to focus the input using useImperativeHandle;
+    // the empty dependency list keeps the handle from being rebuilt on every render
     useImperativeHandle(ref, () => ({
-        focusInput: () => {
-            if (inputRef.current) {
-                inputRef.current.focus();
-            }
-        }
-    }));
+        focusInput: () => inputRef.current?.focus(),
+    }), []);
 
     console.log('Sibling Render End');
 
@@ -87,6 +83,6 @@ const Sibling = forwardRef<SiblingHandle>((_props, ref) => {
             <input ref={inputRef} placeholder="Focus me via imperative handle" />
         </div>
     );
-});
+};
 
 export default Sibling;

@@ -1,5 +1,5 @@
 // src/features/counterSlice.ts
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 // Define the initial state for the counter
 interface CounterState {
